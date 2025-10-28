@@ -1,11 +1,11 @@
 {
-    "name": "360gyro_webgl",
-    "short_name": "360gyro_webgl",
+    "name": "google cardboard",
+    "short_name": "google cardboard",
     "start_url": "index.html",
     "display": "fullscreen",
     "background_color": "#231F20",
     "theme_color": "#000",
-    "description": "MYK",
+    "description": "",
     "icons": [{
       "src": "TemplateData/icons/unity-logo-dark.png",
       "sizes": "144x144",

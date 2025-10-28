@@ -1,9 +1,9 @@
-const cacheName = "The MANA House-360gyro_webgl-1.0.0";
+const cacheName = "DefaultCompany-google cardboard-0.1";
 const contentToCache = [
-    "Build/New folder (5).loader.js",
-    "Build/New folder (5).framework.js.unityweb",
-    "Build/New folder (5).data.unityweb",
-    "Build/New folder (5).wasm.unityweb",
+    "Build/scratch.loader.js",
+    "Build/scratch.framework.js.unityweb",
+    "Build/scratch.data.unityweb",
+    "Build/scratch.wasm.unityweb",
     "TemplateData/style.css"
 
 ];
