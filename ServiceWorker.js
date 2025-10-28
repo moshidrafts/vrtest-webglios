@@ -1,9 +1,9 @@
 const cacheName = "MANAhouse-googleCardboardReplica-0.3";
 const contentToCache = [
-    "Build/webgl4.loader.js",
-    "Build/webgl4.framework.js.unityweb",
-    "Build/webgl4.data.unityweb",
-    "Build/webgl4.wasm.unityweb",
+    "Build/webgl5.loader.js",
+    "Build/webgl5.framework.js.unityweb",
+    "Build/webgl5.data.unityweb",
+    "Build/webgl5.wasm.unityweb",
     "TemplateData/style.css"
 
 ];
