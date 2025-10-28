@@ -1,11 +1,11 @@
 {
-    "name": "360gyro",
-    "short_name": "360gyro",
+    "name": "360gyro_webgl",
+    "short_name": "360gyro_webgl",
     "start_url": "index.html",
     "display": "fullscreen",
     "background_color": "#231F20",
     "theme_color": "#000",
-    "description": "360 Stereo VR Mode WebGL Gyroscope Test",
+    "description": "MYK",
     "icons": [{
       "src": "TemplateData/icons/unity-logo-dark.png",
       "sizes": "144x144",
