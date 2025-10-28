@@ -1,9 +1,9 @@
 const cacheName = "The MANA House-360gyro-1.0.0";
 const contentToCache = [
-    "Build/av.loader.js",
-    "Build/av.framework.js.unityweb",
-    "Build/av.data.unityweb",
-    "Build/av.wasm.unityweb",
+    "Build/NOav.loader.js",
+    "Build/NOav.framework.js.unityweb",
+    "Build/NOav.data.unityweb",
+    "Build/NOav.wasm.unityweb",
     "TemplateData/style.css"
 
 ];
