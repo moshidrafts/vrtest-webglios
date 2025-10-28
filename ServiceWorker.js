@@ -1,9 +1,9 @@
 const cacheName = "DefaultCompany-google cardboard-0.1";
 const contentToCache = [
-    "Build/s.loader.js",
-    "Build/s.framework.js.unityweb",
-    "Build/s.data.unityweb",
-    "Build/s.wasm.unityweb",
+    "Build/final.loader.js",
+    "Build/final.framework.js.unityweb",
+    "Build/final.data.unityweb",
+    "Build/final.wasm.unityweb",
     "TemplateData/style.css"
 
 ];
