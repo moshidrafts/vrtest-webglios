@@ -1,11 +1,11 @@
 {
-    "name": "google cardboard",
-    "short_name": "google cardboard",
+    "name": "360gyro",
+    "short_name": "360gyro",
     "start_url": "index.html",
     "display": "fullscreen",
     "background_color": "#231F20",
     "theme_color": "#000",
-    "description": "",
+    "description": "360 Stereo VR Mode WebGL Gyroscope Test",
     "icons": [{
       "src": "TemplateData/icons/unity-logo-dark.png",
       "sizes": "144x144",

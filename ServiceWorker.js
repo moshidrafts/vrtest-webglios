@@ -1,9 +1,9 @@
-const cacheName = "DefaultCompany-google cardboard-0.1";
+const cacheName = "The MANA House-360gyro-1.0.0";
 const contentToCache = [
-    "Build/f2.loader.js",
-    "Build/f2.framework.js.unityweb",
-    "Build/f2.data.unityweb",
-    "Build/f2.wasm.unityweb",
+    "Build/f3.loader.js",
+    "Build/f3.framework.js.unityweb",
+    "Build/f3.data.unityweb",
+    "Build/f3.wasm.unityweb",
     "TemplateData/style.css"
 
 ];
