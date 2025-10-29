@@ -224,33 +224,6 @@
     </video>
 
     <script>
-
-      // Orientation warning logic (iPhone only, after language selection)
-function isiPhone() {
-  return /iPhone|iPod/i.test(navigator.userAgent);
-}
-
-const orientationWarning = document.getElementById('orientation-warning');
-let orientationCheckEnabled = false; // Only enabled after language selection
-
-function checkOrientation() {
-  if (!orientationCheckEnabled) return; // Don't run before language is picked
-
-  if (isiPhone()) {
-    if (window.matchMedia("(orientation: portrait)").matches) {
-      orientationWarning.style.display = "flex";
-    } else {
-      orientationWarning.style.display = "none";
-    }
-  } else {
-    orientationWarning.style.display = "none";
-  }
-}
-
-// Listen for orientation or resize events
-window.addEventListener("orientationchange", checkOrientation);
-window.addEventListener("resize", checkOrientation);
-
       window.dataLayer = window.dataLayer || [];
 
       const video = document.getElementById('vid360');
@@ -333,9 +306,6 @@ function startPlaybackForLanguage(langKey) {
       console.error('Playback failed:', err);
     });
   }
-  orientationCheckEnabled = true;
-  checkOrientation();
-
 }
 
 
@@ -371,26 +341,5 @@ video.addEventListener('play', function() {
       btnHindi.onclick = () => startPlaybackForLanguage('hi');
       btnMalayalam.onclick = () => startPlaybackForLanguage('ml');
     </script>
-    <div id="orientation-warning" style="
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.9);
-  color: #fff;
-  z-index: 99999;
-  font-family: system-ui, -apple-system, sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  padding: 24px;
-">
-  <div style="font-size: 1.5rem; font-weight: 600;">Please rotate your device</div>
-  <div style="margin-top: 10px; font-size: 1rem; opacity: 0.85;">
-    This experience works best in landscape mode.
-  </div>
-</div>
-
   </body>
 </html>
