@@ -135,7 +135,7 @@
 
     <!-- Hidden video -->
     <video id="vid360"
-      autoplay loop playsinline webkit-playsinline crossorigin="anonymous"
+      autoplay loop playsinline webkit-playsinline crossorigin="anonymous" muted
       style="display:none;">
     </video>
 
@@ -170,7 +170,15 @@
 function startPlaybackForLanguage(langKey) {
   const hlsSrc = sourcesByLang[langKey];
   if (!hlsSrc) return;
-requestMotionPermission();
+
+  // GA4 TRACKING: Push language selection event (restore)
+  dataLayer.push({
+    event: 'language_selected',
+    language_choice: langKey === 'hi' ? 'Hindi' : 'Malayalam'
+  });
+
+  requestMotionPermission();
+
   // Try to lock orientation
   if (screen.orientation && screen.orientation.lock) {
     screen.orientation.lock('landscape').catch(() => {});
@@ -178,37 +186,73 @@ requestMotionPermission();
 
   overlay.style.display = 'none';
 
+  // Ensure video starts muted so autoplay is allowed; we'll unmute after play
+  video.muted = true;
+
   if (Hls.isSupported()) {
     const hls = new Hls();
     hls.loadSource(hlsSrc);
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      video.muted = false; // ensure audio is enabled
-      video.play();
+      // Start playback, then unmute when promise resolves
+      video.play().then(() => {
+        video.muted = false;
+        video.volume = 1.0;
+      }).catch(err => {
+        console.error('Playback failed:', err);
+      });
     });
   } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
     video.src = hlsSrc;
     video.addEventListener('loadedmetadata', () => {
-      video.muted = false;
-      video.play();
-    });
+      video.play().then(() => {
+        video.muted = false;
+        video.volume = 1.0;
+      }).catch(err => {
+        console.error('Playback failed:', err);
+      });
+    }, { once: true });
   } else {
     video.src = hlsSrc;
-    video.muted = false;
-    video.play();
+    // fallback: attempt to play and unmute after play resolves
+    video.play().then(() => {
+      video.muted = false;
+      video.volume = 1.0;
+    }).catch(err => {
+      console.error('Playback failed:', err);
+    });
   }
 }
 
-      let hasCompleted = false;
-      video.addEventListener('ended', () => {
-        if (!hasCompleted) {
-          hasCompleted = true;
-          dataLayer.push({ event: 'video_completed' });
-        }
-      });
-      video.addEventListener('play', () => {
-        if (video.currentTime < 1) hasCompleted = false;
-      });
+
+// GA4 TRACKING: FINAL & MOST RELIABLE VIDEO COMPLETION LOGIC
+let hasCompleted = false;
+
+// timeupdate near-end detection (robust for streamed HLS and looped media)
+video.addEventListener('timeupdate', function() {
+  if (video.duration > 0 && (video.duration - video.currentTime < 0.5) && !hasCompleted) {
+    hasCompleted = true;
+    console.log('Video playback has completed (timeupdate)!');
+    dataLayer.push({ event: 'video_completed' });
+  }
+});
+
+// Fallback: also listen for 'ended' just in case
+video.addEventListener('ended', function() {
+  if (!hasCompleted) {
+    hasCompleted = true;
+    console.log('Video playback has completed (ended)!');
+    dataLayer.push({ event: 'video_completed' });
+  }
+});
+
+// Reset completion flag when starting from beginning
+video.addEventListener('play', function() {
+  if (video.currentTime < 1) {
+    hasCompleted = false;
+  }
+});
+
 
       btnHindi.onclick = () => startPlaybackForLanguage('hi');
       btnMalayalam.onclick = () => startPlaybackForLanguage('ml');
