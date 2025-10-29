@@ -1,199 +1,200 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-NZHKSD52');</script>
+  <head>
+    <meta charset="utf-8" />
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NZHKSD52');</script>
 
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-        background: black;
-      }
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        background: black;
+      }
 
-      #vr-wrapper {
-        background: black;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        position: relative;
-      }
+      #vr-wrapper {
+        background: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
 
-      #overlay-image {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        aspect-ratio: 2 / 1;
-        height: 100%;
-        width: auto;
-        object-fit: cover;
-        pointer-events: none;
-      }
+      #overlay-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        aspect-ratio: 2 / 1;
+        height: 100%;
+        width: auto;
+        object-fit: cover;
+        pointer-events: none;
+      }
 
-      #vr-container {
-        display: flex;
-        flex-direction: row;
-        aspect-ratio: 2 / 1;
-        height: 100%;
-        width: auto;
-        background: black;
-        overflow: hidden;
-      }
+      #vr-container {
+        display: flex;
+        flex-direction: row;
+        aspect-ratio: 2 / 1;
+        height: 100%;
+        width: auto;
+        background: black;
+        overflow: hidden;
+      }
 
-      #vr-container a-scene {
-        flex: 1;
-        height: 100%;
-      }
+      #vr-container a-scene {
+        flex: 1;
+        height: 100%;
+      }
 
-      /* Mobile stacking (vertical) */
-      @media (max-width: 768px) {
-        #vr-container {
-          flex-direction: column;
-          aspect-ratio: auto;
-          height: 100%;
-          width: auto;
-        }
+      /* Mobile stacking (vertical) */
+      @media (max-width: 768px) {
+        #vr-container {
+          flex-direction: column;
+          aspect-ratio: auto;
+          height: 100%;
+          width: auto;
+        }
 
-        #vr-container a-scene {
-          width: 100%;
-          height: 50%;
-        }
-      }
-    </style>
-  </head>
+        #vr-container a-scene {
+          width: 100%;
+          height: 50%;
+        }
+      }
+    </style>
+  </head>
 
-  <body style="margin:0; padding:0; overflow:hidden; height:100vh; width:100vw;">
-    <noscript>
-      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NZHKSD52"
-        height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
+  <body style="margin:0; padding:0; overflow:hidden; height:100vh; width:100vw;">
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NZHKSD52"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
 
-        <div id="language-overlay" style="
-      position:fixed; inset:0; background:rgba(20,20,20,0.93);
-      display:flex; align-items:center; justify-content:center;
-      z-index:9999; color:#fff; flex-direction:column; gap:28px;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      text-align:center; padding:24px; box-shadow:0 8px 48px rgba(0,0,0,0.6);
-      backdrop-filter:blur(8px);
-    ">
-      <div style="font-size:2.1rem;font-weight:700;letter-spacing:0.05em;margin-bottom:2px;">
-        Select Language
-      </div>
-      <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;width:100%;max-width:500px;">
-        <button id="btn-hindi" style="
-          flex:1 1 220px;min-width:220px;max-width:220px;height:66px;border-radius:16px;border:none;
-          background:rgba(38,38,38,0.98);color:#fff;cursor:pointer;font-size:1.22rem;font-weight:600;
-          letter-spacing:0.03em;box-shadow:0 4px 32px rgba(0,0,0,0.19);margin:4px;
-          transition:background 0.19s,transform 0.13s,box-shadow 0.19s;outline:none;
-          display:flex;align-items:center;justify-content:center;padding:0 8px;
-        "
-        onmouseover="this.style.background='#444';this.style.boxShadow='0 4px 32px rgba(0,0,0,0.31)';this.style.transform='scale(1.07)'"
-        onmouseout="this.style.background='rgba(38,38,38,0.98)';this.style.boxShadow='0 4px 32px rgba(0,0,0,0.19)';this.style.transform='scale(1)'"
-        onmousedown="this.style.background='#555'"
-        onmouseup="this.style.background='#444'">Hindi</button>
+    <!-- LANGUAGE OVERLAY -->
+    <div id="language-overlay" style="
+      position:fixed; inset:0; background:rgba(20,20,20,0.93);
+      display:flex; align-items:center; justify-content:center;
+      z-index:9999; color:#fff; flex-direction:column; gap:28px;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      text-align:center; padding:24px; box-shadow:0 8px 48px rgba(0,0,0,0.6);
+      backdrop-filter:blur(8px);
+    ">
+      <div style="font-size:2.1rem;font-weight:700;letter-spacing:0.05em;margin-bottom:2px;">
+        Select Language
+      </div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;width:100%;max-width:500px;">
+        <button id="btn-hindi" style="
+          flex:1 1 220px;min-width:220px;max-width:220px;height:66px;border-radius:16px;border:none;
+          background:rgba(38,38,38,0.98);color:#fff;cursor:pointer;font-size:1.22rem;font-weight:600;
+          letter-spacing:0.03em;box-shadow:0 4px 32px rgba(0,0,0,0.19);margin:4px;
+          transition:background 0.19s,transform 0.13s,box-shadow 0.19s;outline:none;
+          display:flex;align-items:center;justify-content:center;padding:0 8px;
+        "
+        onmouseover="this.style.background='#444';this.style.boxShadow='0 4px 32px rgba(0,0,0,0.31)';this.style.transform='scale(1.07)'"
+        onmouseout="this.style.background='rgba(38,38,38,0.98)';this.style.boxShadow='0 4px 32px rgba(0,0,0,0.19)';this.style.transform='scale(1)'"
+        onmousedown="this.style.background='#555'"
+        onmouseup="this.style.background='#444'">Hindi</button>
 
-        <button id="btn-malayalam" style="
-          flex:1 1 220px;min-width:220px;max-width:220px;height:66px;border-radius:16px;border:none;
-          background:rgba(38,38,38,0.98);color:#fff;cursor:pointer;font-size:1.22rem;font-weight:600;
-          letter-spacing:0.03em;box-shadow:0 4px 32px rgba(0,0,0,0.19);margin:4px;
-          transition:background 0.19s,transform 0.13s,box-shadow 0.19s;outline:none;
-          display:flex;align-items:center;justify-content:center;padding:0 8px;
-        "
-        onmouseover="this.style.background='#444';this.style.boxShadow='0 4px 32px rgba(0,0,0,0.31)';this.style.transform='scale(1.07)'"
-        onmouseout="this.style.background='rgba(38,38,38,0.98)';this.style.boxShadow='0 4px 32px rgba(0,0,0,0.19)';this.style.transform='scale(1)'"
-        onmousedown="this.style.background='#555'"
-        onmouseup="this.style.background='#444'">Malayalam</button>
-      </div>
-    </div>
+        <button id="btn-malayalam" style="
+          flex:1 1 220px;min-width:220px;max-width:220px;height:66px;border-radius:16px;border:none;
+          background:rgba(38,38,38,0.98);color:#fff;cursor:pointer;font-size:1.22rem;font-weight:600;
+          letter-spacing:0.03em;box-shadow:0 4px 32px rgba(0,0,0,0.19);margin:4px;
+          transition:background 0.19s,transform 0.13s,box-shadow 0.19s;outline:none;
+          display:flex;align-items:center;justify-content:center;padding:0 8px;
+        "
+        onmouseover="this.style.background='#444';this.style.boxShadow='0 4px 32px rgba(0,0,0,0.31)';this.style.transform='scale(1.07)'"
+        onmouseout="this.style.background='rgba(38,38,38,0.98)';this.style.boxShadow='0 4px 32px rgba(0,0,0,0.19)';this.style.transform='scale(1)'"
+        onmousedown="this.style.background='#555'"
+        onmouseup="this.style.background='#444'">Malayalam</button>
+      </div>
+    </div>
 
-    <div id="vr-wrapper">
-      <div id="vr-container">
-        <a-scene embedded vr-mode-ui="enabled: false" ar-mode-ui="enabled: false">
-          <a-videosphere src="#vid360" rotation="0 180 0"></a-videosphere>
-          <a-camera position="0 0 0" look-controls="touchEnabled: false; mouseEnabled: false"></a-camera>
-        </a-scene>
-        <a-scene embedded vr-mode-ui="enabled: false" ar-mode-ui="enabled: false">
-          <a-videosphere src="#vid360" rotation="0 180 0"></a-videosphere>
-          <a-camera position="0 0 0" look-controls="touchEnabled: false; mouseEnabled: false"></a-camera>
-        </a-scene>
-      </div>
-          </div>
+    <div id="vr-wrapper">
+      <div id="vr-container">
+        <a-scene embedded vr-mode-ui="enabled: false" ar-mode-ui="enabled: false">
+          <a-videosphere src="#vid360" rotation="0 180 0"></a-videosphere>
+          <a-camera position="0 0 0" look-controls="touchEnabled: false; mouseEnabled: false"></a-camera>
+        </a-scene>
+        <a-scene embedded vr-mode-ui="enabled: false" ar-mode-ui="enabled: false">
+          <a-videosphere src="#vid360" rotation="0 180 0"></a-videosphere>
+          <a-camera position="0 0 0" look-controls="touchEnabled: false; mouseEnabled: false"></a-camera>
+        </a-scene>
+      </div>
+      <!-- <img id="overlay-image" src="vroverlay21.png" alt="Overlay" /> -->
+    </div>
 
-        <video id="vid360"
-      autoplay loop playsinline webkit-playsinline crossorigin="anonymous"
-      style="display:none;">
-    </video>
+    <!-- Hidden video -->
+    <video id="vid360"
+      autoplay loop playsinline webkit-playsinline crossorigin="anonymous"
+      style="display:none;">
+    </video>
 
-    <script>
-      window.dataLayer = window.dataLayer || [];
+    <script>
+      window.dataLayer = window.dataLayer || [];
 
-      const video = document.getElementById('vid360');
-      const overlay = document.getElementById('language-overlay');
-      const btnHindi = document.getElementById('btn-hindi');
-      const btnMalayalam = document.getElementById('btn-malayalam');
+      const video = document.getElementById('vid360');
+      const overlay = document.getElementById('language-overlay');
+      const btnHindi = document.getElementById('btn-hindi');
+      const btnMalayalam = document.getElementById('btn-malayalam');
 
-      const sourcesByLang = {
-        hi: 'https://stream.mux.com/PfUAw4LQEp600N7AZeZLHRnd5rPvU00lBPGwkzZDH01Q4Q.m3u8',
-        ml: 'https://stream.mux.com/ONbhP3Pu1cRkn00u1UHR02dX02D92tcr901CV01Q4LqLL9JI.m3u8'
-      };
+      const sourcesByLang = {
+        hi: 'https://stream.mux.com/PfUAw4LQEp600N7AZeZLHRnd5rPvU00lBPGwkzZDH01Q4Q.m3u8',
+        ml: 'https://stream.mux.com/ONbhP3Pu1cRkn00u1UHR02dX02D92tcr901CV01Q4LqLL9JI.m3u8'
+      };
 
-      function startPlaybackForLanguage(langKey) {
-        const hlsSrc = sourcesByLang[langKey];
-        if (!hlsSrc) return;
+      function startPlaybackForLanguage(langKey) {
+        const hlsSrc = sourcesByLang[langKey];
+        if (!hlsSrc) return;
 
-        // Try to lock screen orientation to landscape
-        if (screen.orientation && screen.orientation.lock) {
-          screen.orientation.lock('landscape').catch(() => {});
-        }
+        // Try to lock screen orientation to landscape
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock('landscape').catch(() => {});
+        }
 
-        dataLayer.push({
-          event: 'language_selected',
-          language_choice: langKey === 'hi' ? 'Hindi' : 'Malayalam'
-        });
+        dataLayer.push({
+          event: 'language_selected',
+          language_choice: langKey === 'hi' ? 'Hindi' : 'Malayalam'
+        });
 
-        overlay.style.display = 'none';
-        video.muted = false; // Unmute the video after user interaction
+        overlay.style.display = 'none';
 
-        if (Hls.isSupported()) {
-          const hls = new Hls();
-          hls.loadSource(hlsSrc);
-          hls.attachMedia(video);
-          hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = hlsSrc;
-          video.addEventListener('loadedmetadata', () => video.play());
-        } else {
-          video.src = hlsSrc;
-          video.play();
-        }
-      }
+        if (Hls.isSupported()) {
+          const hls = new Hls();
+          hls.loadSource(hlsSrc);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = hlsSrc;
+          video.addEventListener('loadedmetadata', () => video.play());
+        } else {
+          video.src = hlsSrc;
+          video.play();
+        }
+      }
 
-      let hasCompleted = false;
-      video.addEventListener('ended', () => {
-        if (!hasCompleted) {
-          hasCompleted = true;
-          dataLayer.push({ event: 'video_completed' });
-        }
-      });
-      video.addEventListener('play', () => {
-        if (video.currentTime < 1) hasCompleted = false;
-      });
+      let hasCompleted = false;
+      video.addEventListener('ended', () => {
+        if (!hasCompleted) {
+          hasCompleted = true;
+          dataLayer.push({ event: 'video_completed' });
+        }
+      });
+      video.addEventListener('play', () => {
+        if (video.currentTime < 1) hasCompleted = false;
+      });
 
-      btnHindi.onclick = () => startPlaybackForLanguage('hi');
-      btnMalayalam.onclick = () => startPlaybackForLanguage('ml');
-    </script>
-  </body>
-</html>
+      btnHindi.onclick = () => startPlaybackForLanguage('hi');
+      btnMalayalam.onclick = () => startPlaybackForLanguage('ml');
+    </script>
+  </body>
 </html>
