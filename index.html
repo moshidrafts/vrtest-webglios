@@ -120,16 +120,20 @@
     </div>
 
     <div id="vr-wrapper">
-      <div id="vr-container">
-        <a-scene embedded vr-mode-ui="enabled: false" ar-mode-ui="enabled: false">
-          <a-videosphere src="#vid360" rotation="0 180 0"></a-videosphere>
-          <a-camera position="0 0 0" look-controls="touchEnabled: false; mouseEnabled: false"></a-camera>
-        </a-scene>
-        <a-scene embedded vr-mode-ui="enabled: false" ar-mode-ui="enabled: false">
-          <a-videosphere src="#vid360" rotation="0 180 0"></a-videosphere>
-          <a-camera position="0 0 0" look-controls="touchEnabled: false; mouseEnabled: false"></a-camera>
-        </a-scene>
-      </div>
+<div id="vr-container">
+  <!-- LEFT EYE -->
+  <a-scene embedded vr-mode-ui="enabled: false" ar-mode-ui="enabled: false">
+    <a-videosphere src="#vid360" rotation="0 180 0"></a-videosphere>
+    <a-camera position="-0.0315 0 0" look-controls="touchEnabled: false; mouseEnabled: false"></a-camera>
+  </a-scene>
+
+  <!-- RIGHT EYE -->
+  <a-scene embedded vr-mode-ui="enabled: false" ar-mode-ui="enabled: false">
+    <a-videosphere src="#vid360" rotation="0 180 0"></a-videosphere>
+    <a-camera position="0.0315 0 0" look-controls="touchEnabled: false; mouseEnabled: false"></a-camera>
+  </a-scene>
+</div>
+
       <!-- <img id="overlay-image" src="vroverlay21.png" alt="Overlay" /> -->
     </div>
 
@@ -198,5 +202,59 @@ function startPlaybackForLanguage(langKey) {
       btnHindi.onclick = () => startPlaybackForLanguage('hi');
       btnMalayalam.onclick = () => startPlaybackForLanguage('ml');
     </script>
+    <script>
+  // --- iOS motion permission ---
+  function requestMotionPermission() {
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission()
+        .then(response => {
+          if (response === 'granted') {
+            console.log('✅ Motion permission granted');
+          } else {
+            alert('Please enable motion access for VR view to work.');
+          }
+        })
+        .catch(console.error);
+    }
+  }
+
+  // ask permission right after user picks language
+  function startPlaybackForLanguage(langKey) {
+    const hlsSrc = sourcesByLang[langKey];
+    if (!hlsSrc) return;
+
+    // iOS motion permission
+    requestMotionPermission();
+
+    // Try to lock screen orientation
+    if (screen.orientation && screen.orientation.lock) {
+      screen.orientation.lock('landscape').catch(() => {});
+    }
+
+    overlay.style.display = 'none';
+
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(hlsSrc);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.muted = false;
+        video.play();
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = hlsSrc;
+      video.addEventListener('loadedmetadata', () => {
+        video.muted = false;
+        video.play();
+      });
+    } else {
+      video.src = hlsSrc;
+      video.muted = false;
+      video.play();
+    }
+  }
+</script>
+
   </body>
 </html>
