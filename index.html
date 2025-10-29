@@ -1,103 +1,200 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | 360gyro</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-    <link rel="manifest" href="manifest.webmanifest">
+    <meta charset="utf-8" />
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-NZHKSD52');</script>
+
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        background: black;
+      }
+
+      #vr-wrapper {
+        background: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      #overlay-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        aspect-ratio: 2 / 1;
+        height: 100%;
+        width: auto;
+        object-fit: cover;
+        pointer-events: none;
+      }
+
+      #vr-container {
+        display: flex;
+        flex-direction: row;
+        aspect-ratio: 2 / 1;
+        height: 100%;
+        width: auto;
+        background: black;
+        overflow: hidden;
+      }
+
+      #vr-container a-scene {
+        flex: 1;
+        height: 100%;
+      }
+
+      /* Mobile stacking (vertical) */
+      @media (max-width: 768px) {
+        #vr-container {
+          flex-direction: column;
+          aspect-ratio: auto;
+          height: 100%;
+          width: auto;
+        }
+
+        #vr-container a-scene {
+          width: 100%;
+          height: 50%;
+        }
+      }
+    </style>
   </head>
-  <body>
-    <div id="unity-container">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
-        </div>
+
+  <body style="margin:0; padding:0; overflow:hidden; height:100vh; width:100vw;">
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NZHKSD52"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+
+    <!-- LANGUAGE OVERLAY -->
+    <div id="language-overlay" style="
+      position:fixed; inset:0; background:rgba(20,20,20,0.93);
+      display:flex; align-items:center; justify-content:center;
+      z-index:9999; color:#fff; flex-direction:column; gap:28px;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      text-align:center; padding:24px; box-shadow:0 8px 48px rgba(0,0,0,0.6);
+      backdrop-filter:blur(8px);
+    ">
+      <div style="font-size:2.1rem;font-weight:700;letter-spacing:0.05em;margin-bottom:2px;">
+        Select Language
       </div>
-      <div id="unity-warning"> </div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;width:100%;max-width:500px;">
+        <button id="btn-hindi" style="
+          flex:1 1 220px;min-width:220px;max-width:220px;height:66px;border-radius:16px;border:none;
+          background:rgba(38,38,38,0.98);color:#fff;cursor:pointer;font-size:1.22rem;font-weight:600;
+          letter-spacing:0.03em;box-shadow:0 4px 32px rgba(0,0,0,0.19);margin:4px;
+          transition:background 0.19s,transform 0.13s,box-shadow 0.19s;outline:none;
+          display:flex;align-items:center;justify-content:center;padding:0 8px;
+        "
+        onmouseover="this.style.background='#444';this.style.boxShadow='0 4px 32px rgba(0,0,0,0.31)';this.style.transform='scale(1.07)'"
+        onmouseout="this.style.background='rgba(38,38,38,0.98)';this.style.boxShadow='0 4px 32px rgba(0,0,0,0.19)';this.style.transform='scale(1)'"
+        onmousedown="this.style.background='#555'"
+        onmouseup="this.style.background='#444'">Hindi</button>
+
+        <button id="btn-malayalam" style="
+          flex:1 1 220px;min-width:220px;max-width:220px;height:66px;border-radius:16px;border:none;
+          background:rgba(38,38,38,0.98);color:#fff;cursor:pointer;font-size:1.22rem;font-weight:600;
+          letter-spacing:0.03em;box-shadow:0 4px 32px rgba(0,0,0,0.19);margin:4px;
+          transition:background 0.19s,transform 0.13s,box-shadow 0.19s;outline:none;
+          display:flex;align-items:center;justify-content:center;padding:0 8px;
+        "
+        onmouseover="this.style.background='#444';this.style.boxShadow='0 4px 32px rgba(0,0,0,0.31)';this.style.transform='scale(1.07)'"
+        onmouseout="this.style.background='rgba(38,38,38,0.98)';this.style.boxShadow='0 4px 32px rgba(0,0,0,0.19)';this.style.transform='scale(1)'"
+        onmousedown="this.style.background='#555'"
+        onmouseup="this.style.background='#444'">Malayalam</button>
+      </div>
     </div>
+
+    <div id="vr-wrapper">
+      <div id="vr-container">
+        <a-scene embedded vr-mode-ui="enabled: false" ar-mode-ui="enabled: false">
+          <a-videosphere src="#vid360" rotation="0 180 0"></a-videosphere>
+          <a-camera position="0 0 0" look-controls="touchEnabled: false; mouseEnabled: false"></a-camera>
+        </a-scene>
+        <a-scene embedded vr-mode-ui="enabled: false" ar-mode-ui="enabled: false">
+          <a-videosphere src="#vid360" rotation="0 180 0"></a-videosphere>
+          <a-camera position="0 0 0" look-controls="touchEnabled: false; mouseEnabled: false"></a-camera>
+        </a-scene>
+      </div>
+      <!-- <img id="overlay-image" src="vroverlay21.png" alt="Overlay" /> -->
+    </div>
+
+    <!-- Hidden video -->
+    <video id="vid360"
+      autoplay loop playsinline webkit-playsinline crossorigin="anonymous" muted
+      style="display:none;">
+    </video>
+
     <script>
-      window.addEventListener("load", function () {
-        if ("serviceWorker" in navigator) {
-          navigator.serviceWorker.register("ServiceWorker.js");
+      window.dataLayer = window.dataLayer || [];
+
+      const video = document.getElementById('vid360');
+      const overlay = document.getElementById('language-overlay');
+      const btnHindi = document.getElementById('btn-hindi');
+      const btnMalayalam = document.getElementById('btn-malayalam');
+
+      const sourcesByLang = {
+        hi: 'https://stream.mux.com/R3FTRZLcRuMCXuvYrgbwQDGSmMDSDejmve8thGXL7Io.m3u8',
+        ml: 'https://stream.mux.com/R3FTRZLcRuMCXuvYrgbwQDGSmMDSDejmve8thGXL7Io.m3u8'
+      };
+
+      function startPlaybackForLanguage(langKey) {
+        const hlsSrc = sourcesByLang[langKey];
+        if (!hlsSrc) return;
+
+        // Try to lock screen orientation to landscape
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock('landscape').catch(() => {});
+        }
+
+        dataLayer.push({
+          event: 'language_selected',
+          language_choice: langKey === 'hi' ? 'Hindi' : 'Malayalam'
+        });
+
+        overlay.style.display = 'none';
+
+        if (Hls.isSupported()) {
+          const hls = new Hls();
+          hls.loadSource(hlsSrc);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = hlsSrc;
+          video.addEventListener('loadedmetadata', () => video.play());
+        } else {
+          video.src = hlsSrc;
+          video.play();
+        }
+      }
+
+      let hasCompleted = false;
+      video.addEventListener('ended', () => {
+        if (!hasCompleted) {
+          hasCompleted = true;
+          dataLayer.push({ event: 'video_completed' });
         }
       });
+      video.addEventListener('play', () => {
+        if (video.currentTime < 1) hasCompleted = false;
+      });
 
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var warningBanner = document.querySelector("#unity-warning");
-
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
-      }
-
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/f3.loader.js";
-      var config = {
-        dataUrl: buildUrl + "/f3.data.unityweb",
-        frameworkUrl: buildUrl + "/f3.framework.js.unityweb",
-        codeUrl: buildUrl + "/f3.wasm.unityweb",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "The MANA House",
-        productName: "360gyro",
-        productVersion: "1.0.0",
-        showBanner: unityShowBanner,
-      };
-
-      // By default Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
-
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-      }
-
-      loadingBar.style.display = "block";
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = 100 * progress + "%";
-        }).then((unityInstance) => {
-          loadingBar.style.display = "none";
-        }).catch((message) => {
-          alert(message);
-        });
-      };
-      document.body.appendChild(script);
+      btnHindi.onclick = () => startPlaybackForLanguage('hi');
+      btnMalayalam.onclick = () => startPlaybackForLanguage('ml');
     </script>
   </body>
 </html>
