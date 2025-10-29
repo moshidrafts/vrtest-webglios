@@ -135,7 +135,7 @@
 
     <!-- Hidden video -->
     <video id="vid360"
-      autoplay loop playsinline webkit-playsinline crossorigin="anonymous" muted
+      autoplay loop playsinline webkit-playsinline crossorigin="anonymous"
       style="display:none;">
     </video>
 
@@ -152,35 +152,37 @@
         ml: 'https://stream.mux.com/ONbhP3Pu1cRkn00u1UHR02dX02D92tcr901CV01Q4LqLL9JI.m3u8'
       };
 
-      function startPlaybackForLanguage(langKey) {
-        const hlsSrc = sourcesByLang[langKey];
-        if (!hlsSrc) return;
+function startPlaybackForLanguage(langKey) {
+  const hlsSrc = sourcesByLang[langKey];
+  if (!hlsSrc) return;
 
-        // Try to lock screen orientation to landscape
-        if (screen.orientation && screen.orientation.lock) {
-          screen.orientation.lock('landscape').catch(() => {});
-        }
+  // Try to lock orientation
+  if (screen.orientation && screen.orientation.lock) {
+    screen.orientation.lock('landscape').catch(() => {});
+  }
 
-        dataLayer.push({
-          event: 'language_selected',
-          language_choice: langKey === 'hi' ? 'Hindi' : 'Malayalam'
-        });
+  overlay.style.display = 'none';
 
-        overlay.style.display = 'none';
-
-        if (Hls.isSupported()) {
-          const hls = new Hls();
-          hls.loadSource(hlsSrc);
-          hls.attachMedia(video);
-          hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = hlsSrc;
-          video.addEventListener('loadedmetadata', () => video.play());
-        } else {
-          video.src = hlsSrc;
-          video.play();
-        }
-      }
+  if (Hls.isSupported()) {
+    const hls = new Hls();
+    hls.loadSource(hlsSrc);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      video.muted = false; // ensure audio is enabled
+      video.play();
+    });
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = hlsSrc;
+    video.addEventListener('loadedmetadata', () => {
+      video.muted = false;
+      video.play();
+    });
+  } else {
+    video.src = hlsSrc;
+    video.muted = false;
+    video.play();
+  }
+}
 
       let hasCompleted = false;
       video.addEventListener('ended', () => {
