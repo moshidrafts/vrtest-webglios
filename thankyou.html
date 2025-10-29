@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Thank You</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        background: rgba(20, 20, 20, 0.93);
+        color: #fff;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .container {
+        text-align: center;
+        max-width: 90%;
+        padding: 24px;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5em;
+        text-shadow: 0 4px 24px rgba(0,0,0,0.3);
+      }
+
+      p {
+        font-size: clamp(1rem, 2.2vw, 1.4rem);
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.5;
+        margin: 0 auto;
+        max-width: 500px;
+      }
+
+      .btn-home {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 14px 36px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        transition: background 0.25s, transform 0.15s;
+      }
+
+      .btn-home:hover {
+        background: rgba(255,255,255,0.2);
+        transform: scale(1.05);
+      }
+
+      .btn-home:active {
+        transform: scale(0.97);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Thank You for Watching</h1>
+      <p>We hope you enjoyed the experience.</p>
+      <a href="index.html" class="btn-home">Go Back Home</a>
+    </div>
+  </body>
+</html>
