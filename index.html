@@ -225,31 +225,34 @@
 
     <script>
 
-      // Orientation warning logic (iPhone only, after language selection)
+// Orientation warning logic — ONLY for iPhones, after language selection
+const orientationWarning = document.getElementById('orientation-warning');
+let orientationCheckEnabled = false; // Will activate only after language selection
+
 function isiPhone() {
-  return /iPhone|iPod/i.test(navigator.userAgent);
+  // Strictly match iPhones only (not Android, iPads, etc.)
+  return /iPhone/i.test(navigator.userAgent) && !window.MSStream;
 }
 
-const orientationWarning = document.getElementById('orientation-warning');
-let orientationCheckEnabled = false; // Only enabled after language selection
-
 function checkOrientation() {
-  if (!orientationCheckEnabled) return; // Don't run before language is picked
+  if (!orientationCheckEnabled) return; // inactive before language selected
+  if (!isiPhone()) {
+    orientationWarning.style.display = "none";
+    return;
+  }
 
-  if (isiPhone()) {
-    if (window.matchMedia("(orientation: portrait)").matches) {
-      orientationWarning.style.display = "flex";
-    } else {
-      orientationWarning.style.display = "none";
-    }
+  // On iPhone, show warning only in portrait mode
+  if (window.matchMedia("(orientation: portrait)").matches) {
+    orientationWarning.style.display = "flex";
   } else {
     orientationWarning.style.display = "none";
   }
 }
 
-// Listen for orientation or resize events
+// Update on rotation or resize
 window.addEventListener("orientationchange", checkOrientation);
 window.addEventListener("resize", checkOrientation);
+
 
       window.dataLayer = window.dataLayer || [];
 
