@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
       html, body {
         margin: 0;
@@ -81,25 +80,21 @@
 
     <video id="vid360"
       autoplay loop playsinline webkit-playsinline crossorigin="anonymous" muted
-      style="display:none;">
+      style="display:none;"
+      src="https://media.githubusercontent.com/media/moshidrafts/myk/main/public/idc.mp4">
+      <!-- src="https://corah-two.vercel.app/idc.mp4"> -->
     </video>
 
     <script>
       const video = document.getElementById('vid360');
-      const videoSrc = 'https://stream.mux.com/r9uNfQUUoa2lKvxHxBkgha1FG1sErKCezp8Av15tPSU.m3u8'; // Hindi video
 
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(videoSrc);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = videoSrc;
-        video.play();
-      } else {
-        video.src = videoSrc;
-        video.play();
-      }
+      // Attempt to unmute once playback starts
+      video.addEventListener('canplay', () => {
+        video.play().then(() => {
+          video.muted = false;
+          video.volume = 1.0;
+        }).catch(err => console.warn('Autoplay blocked:', err));
+      });
     </script>
   </body>
 </html>
